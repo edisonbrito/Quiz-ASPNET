@@ -1,0 +1,66 @@
+﻿@{
+    ViewBag.Title = "Play";
+}
+
+<div id="bodyContainer" ng-app="QuizApp">
+    <section id="content">
+        <di class="container">
+            <div ng-controller="QuizCtrl" class="row" >
+
+                <h3><timer autostart="false" countdown="countDown" interval="1000" finish-callback="expired()">{{mminutes}} minute{{minutesS}}, {{sseconds}} second{{secondsS}}</timer></h3>
+
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="{{page}}" aria-valuemin="0" aria-valuemax="3" style="width: {{progress}}%">
+                    </div>
+                </div>
+
+                <form name="myForm" ng-submit="submitForm()">
+
+                    <div class="bs-callout " id="callout-buttons-ff-height" >
+
+                        <table class="table table-bordered" ng-show="finished">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Questions</th>
+                                    <th>Answer</th>
+                                    <th>Right or wrong</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="score in scores" >
+                                    <th scope="row">{{$index}}</th>
+                                    <td>{{score.q}}</td>
+                                    <td>{{score.o}}</td>
+                                    <td>{{score.c}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div ng-repeat="(qIndex, question) in questions" ng-hide="finished">
+
+                            <div class="well">
+                                <p>{{question.title}}</p>
+                            </div>
+                            <div ng-repeat="option in question.options" class="radio">
+                                <label>
+                                    <input type="radio" name="question{{qIndex}}" ng-model="answers[qIndex]" value="{{option.id}}" required>
+                                    {{option.title}}
+                                </label>
+                            </div>
+                        </div>
+
+                    </div>
+                    <button class="btn btn-primary" type="button" ng-click="start()" ng-hide="started">Start</button>
+                    <button class="btn btn-success" type="submit" ng-show="started">{{buttonText}}</button>
+
+                </form>
+            </div>
+    </section>
+</div>
+
+@section scripts {
+    @Scripts.Render("~/Scripts/angular.js")
+    @Scripts.Render("~/Scripts/timer.js")
+    @Scripts.Render("~/Scripts/quiz-controller.js")
+}
